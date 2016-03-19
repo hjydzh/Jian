@@ -10,8 +10,7 @@ def insert(sql, parms):
             n = cursor.execute(sql, parm)
         conn.commit()
         cursor.close()
-    except Exception, msg:
-        print(msg)
+    except :
         return
     finally:
         conn.close()

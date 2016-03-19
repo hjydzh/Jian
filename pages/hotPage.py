@@ -17,7 +17,7 @@ def visit():
             if '简书' in blog.title:
                 continue
             user = userPage.user_info(blog.author_url)
-            print(blog.title)
+            #print(blog.title)
             dao.insert_hot_blog(blog,user)
     except:
         pass
@@ -54,5 +54,5 @@ def __parse(blog_soup):
 if __name__ == '__main__':
     while True:
         visit()
-        print('休息5分钟')
+        #print('休息5分钟')
         time.sleep(60 * 5)
