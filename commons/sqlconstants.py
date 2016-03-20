@@ -18,6 +18,6 @@ where id = '%s'
 
 Const.UPDATE_BLOG_SHOW_TIME_VIEW = """
 update hot_blog
-set show_time = %s ,last_view_num = %s
+set show_time = %s ,last_view_num = %s, UPDATE_TIME=NOW()
 where id = %s
 """
