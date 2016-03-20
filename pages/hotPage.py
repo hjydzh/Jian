@@ -1,5 +1,6 @@
 #coding:utf-8
-
+import sys
+sys.path.append('/home/workspace/Jian')
 from BeautifulSoup import BeautifulSoup
 from dmo.Blog import Blog
 from utils import DateUtil
@@ -10,16 +11,22 @@ from daoBase import dao
 import time
 import userPage
 
-def visit():
+def visit(exec_time):
     try:
         blogs = __search()
         for blog in blogs:
             if '简书' in blog.title:
                 continue
             user = userPage.user_info(blog.author_url)
-            #print(blog.title)
-            dao.insert_hot_blog(blog,user)
-    except:
+            print(blog.title)
+            show_time = dao.get_blog_show_time_by_url(blog.url)
+            if not show_time:
+                dao.insert_hot_blog(blog,user)
+            else:
+                interval = int(time.time() - exec_time)
+                dao.update_blog_show_time(blog.url, show_time + interval)
+    except Exception as e:
+        print e
         pass
 
 
@@ -52,7 +59,9 @@ def __parse(blog_soup):
     return blog
 
 if __name__ == '__main__':
+    exec_time = time.time()
     while True:
-        visit()
-        #print('休息5分钟')
+        visit(exec_time)
+        print('休息5分钟')
         time.sleep(60 * 5)
+        exec_time = time.time()

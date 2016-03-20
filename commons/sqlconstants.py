@@ -9,3 +9,15 @@ hot_blog
 values
 (%s,%s,%s,%s,NOW(),%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
 """
+
+Const.GET_BLOG_SHOW_TIME_BY_URL = """
+select show_time
+from hot_blog
+where id = '%s'
+"""
+
+Const.UPDATE_BLOG_SHOW_TIME = """
+update hot_blog
+set show_time = %s
+where id = %s
+"""
