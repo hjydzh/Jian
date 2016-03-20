@@ -24,7 +24,7 @@ def visit(exec_time):
                 dao.insert_hot_blog(blog,user)
             else:
                 interval = int(time.time() - exec_time)
-                dao.update_blog_show_time(blog.url, show_time + interval)
+                dao.update_blog_show_time_view(blog.url, show_time + interval, blog.view)
     except Exception as e:
         print e
         pass
@@ -53,9 +53,9 @@ def __parse(blog_soup):
     nums_str = blog_soup.find(attrs={"class": "list-footer"}).text.encode('utf-8')
     pattern = re.compile(r'阅读 ([0-9]+)· 评论 ([0-9]+)· 喜欢 ([0-9]+)')
     nums = pattern.search(nums_str).groups()
-    blog.comment = nums[1]
-    blog.view = nums[0]
-    blog.like = nums[2]
+    blog.comment = int(nums[1])
+    blog.view = int(nums[0])
+    blog.like = int(nums[2])
     return blog
 
 if __name__ == '__main__':
@@ -63,5 +63,5 @@ if __name__ == '__main__':
     while True:
         visit(exec_time)
         print('休息5分钟')
-        time.sleep(60 * 5)
         exec_time = time.time()
+        time.sleep(60 * 5)

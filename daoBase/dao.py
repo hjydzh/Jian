@@ -14,6 +14,6 @@ def get_blog_show_time_by_url(url):
         return None
     return obj[0][0]
 
-def update_blog_show_time(url, show_time):
-    par = (show_time,url)
-    insert(Const.UPDATE_BLOG_SHOW_TIME,[par])
+def update_blog_show_time_view(url, show_time, view):
+    par = (show_time, view,url)
+    insert(Const.UPDATE_BLOG_SHOW_TIME_VIEW,[par])

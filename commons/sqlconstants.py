@@ -16,8 +16,8 @@ from hot_blog
 where id = '%s'
 """
 
-Const.UPDATE_BLOG_SHOW_TIME = """
+Const.UPDATE_BLOG_SHOW_TIME_VIEW = """
 update hot_blog
-set show_time = %s
+set show_time = %s ,last_view_num = %s
 where id = %s
 """
