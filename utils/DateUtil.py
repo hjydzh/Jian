@@ -10,6 +10,11 @@ def now():
 def now_format(style):
     return now().strftime(style)
 
+#当前时间输出字符串
+def timestamp_format(timestamp, style):
+    return datetime.datetime.fromtimestamp(timestamp).strftime(style)
+
+
 #日期转换成字符串
 def time_to_str(date, style):
     return date.strftime(style)
@@ -46,4 +51,4 @@ def str_to_time_time_style(time_str,style):
     return time.mktime(time.strptime(time_str,style))
 
 if __name__ == '__main__':
-    str_to_time( '2016-03-17T10:31:33+08:00','%Y-%m-%dT%H:%M:%S+08:00')
+   print(now())

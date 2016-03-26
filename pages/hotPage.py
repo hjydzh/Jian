@@ -1,67 +1,56 @@
 #coding:utf-8
 import sys
 sys.path.append('/home/workspace/Jian')
-from BeautifulSoup import BeautifulSoup
-from dmo.Blog import Blog
-from utils import DateUtil
-from utils import HttpUtil
-from commons.TimeConst import *
-import re
 from daoBase import dao
 import time
 import userPage
+from utils import redisUtil
+import json
+from dmo.BlogView import BlogView
+from service import service
 
-def visit(exec_time):
+def visit(exec_time, former_blogs):
     try:
-        blogs = __search()
+        blogs = service.find_blogs('http://www.jianshu.com/')
+        redis = redisUtil.connect()
+        blog_urls = []
         for blog in blogs:
-            if '简书' in blog.title:
+            if ('简书' or '简叔') in blog.title:
                 continue
+            blog_urls.append(blog.url)
             user = userPage.user_info(blog.author_url)
-            print(blog.title)
             show_time = dao.get_blog_show_time_by_url(blog.url)
             if not show_time:
+                pass
                 dao.insert_hot_blog(blog,user)
             else:
                 interval = int(time.time() - exec_time)
                 dao.update_blog_show_time_view(blog.url, show_time + interval, blog.view)
+            service.view_time_insert(time.time(), blog.view, blog.url, redis)
+        for blog in former_blogs:
+            if ('简书' or '简叔') in blog.title:
+                continue
+            if blog.url not in blog_urls:
+                views = service.get_blog_view(blog.url, redis)
+                redis.delete( "blog:" + blog.url.split('/')[2])
+                blog_view = BlogView()
+                blog_view.blog_id = blog.url
+                blog_view.author_url = blog.author_url
+                blog_view.views = json.dumps(views)
+                dao.insert_view(blog_view)
     except Exception as e:
         print e
-        pass
-
-
-def __search():
-    url = 'http://www.jianshu.com/'
-    soup = BeautifulSoup(HttpUtil.request(url))
-    blogs = map(lambda blog_soup:__parse(blog_soup), soup.find(attrs={"class": "article-list thumbnails"}).findAll('li'))
+        return []
     return blogs
 
-def __parse(blog_soup):
-    blog = Blog()
-    try:
-        a =  blog_soup['class']
-        blog.is_have_img = 1
-    except KeyError:
-        pass
-    p = blog_soup.find(attrs={"class": "list-top"})
-    blog.author_name = p.find('a').text.encode('utf-8')
-    blog.author_url = p.find('a')['href'].encode('utf-8')
-    blog.time = DateUtil.str_to_time(p.find('span')['data-shared-at'], Const.JIAN_STYLE,)
-    title_wrap = blog_soup.find(attrs={"class": "title"}).find('a')
-    blog.title = title_wrap.text.encode('utf-8')
-    blog.url = title_wrap['href'].encode('utf-8')
-    nums_str = blog_soup.find(attrs={"class": "list-footer"}).text.encode('utf-8')
-    pattern = re.compile(r'阅读 ([0-9]+)· 评论 ([0-9]+)· 喜欢 ([0-9]+)')
-    nums = pattern.search(nums_str).groups()
-    blog.comment = int(nums[1])
-    blog.view = int(nums[0])
-    blog.like = int(nums[2])
-    return blog
+
+
 
 if __name__ == '__main__':
     exec_time = time.time()
+    former_blogs = []
     while True:
-        visit(exec_time)
+        former_blogs =visit(exec_time, former_blogs)
         print('休息5分钟')
         exec_time = time.time()
         time.sleep(60 * 5)
