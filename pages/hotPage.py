@@ -36,8 +36,14 @@ def visit(exec_time, former_blogs):
                 blog_view = BlogView()
                 blog_view.blog_id = blog.url
                 blog_view.author_url = blog.author_url
-                blog_view.views = json.dumps(views)
-                dao.insert_view(blog_view)
+                db_view = dao.query_view_blog_id(blog.url)
+                if db_view is None:
+                    blog_view.views = json.dumps(views)
+                    dao.insert_view(blog_view)
+                else:
+                    blog_view.views = json.dumps(json.loads(db_view.views).extend(views))
+                    dao.update_blog_views([blog_view])
+
     except Exception as e:
         print e
         return []

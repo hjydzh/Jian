@@ -64,3 +64,7 @@ author_url = %s
 where blog_id = %s
 
 """
+
+Const.QUERY_VIEW_BLOG_ID = Const.SELECT_VIEW + """
+where blog_id = '%s'
+"""

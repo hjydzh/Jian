@@ -20,7 +20,7 @@ def result_to_blog(result):
     blog.is_have_img = result[7]
     return blog
 
-def results_to_blogs(results):
+def results_to_views(results):
     return [ result_to_view(result) for result in results]
 
 def result_to_view(result):

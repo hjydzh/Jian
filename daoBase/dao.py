@@ -33,18 +33,24 @@ def query_hour_blogs(hours):
     obj = query(Const.QUERY_HOUR_BLOGS % hours)
     if not obj:
         return None
-    return dmoUtil.results_to_blogs(obj)
+    return dmoUtil.results_to_views(obj)
 
 def query_day_blogs(hours, days):
     obj = query(Const.QUERY_DAY_BLOGS % (hours,days))
     if not obj:
         return None
-    return dmoUtil.results_to_blogs(obj)
+    return dmoUtil.results_to_views(obj)
+
+def query_view_blog_id(blog_id):
+    obj = query(Const.QUERY_VIEW_BLOG_ID % blog_id)
+    if not obj:
+        return None
+    return dmoUtil.result_to_view(obj[0])
 
 def update_blog_views(blog_views):
     pars = [dmoUtil.view_to_par(view) for view in blog_views]
     insert(Const.UPDATE_BLOG_VIEWS,pars)
 
 if __name__ == '__main__':
-    a = query_hour_blogs(12)
+    a = query_day_blogs(7,2)
     print a
