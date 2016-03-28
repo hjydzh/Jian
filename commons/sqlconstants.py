@@ -60,7 +60,8 @@ hour_views = %s,
 day_views = %s,
 hours_nums = %s,
 days_nums = %s,
-author_url = %s
+author_url = %s,
+UPDATE_TIME = NOW()
 where blog_id = %s
 
 """
