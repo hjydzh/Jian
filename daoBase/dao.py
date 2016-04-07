@@ -25,7 +25,7 @@ def query_blog_by_time(start_time, end_time):
     return dmoUtil.results_to_blogs(obj)
 
 def insert_view(blog_view):
-    par = (blog_view.blog_id, blog_view.views, blog_view.hour_views, blog_view.day_views,blog_view.author_url)
+    par = (blog_view.blog_id, blog_view.views, blog_view.author_url)
     insert(Const.INSERT_VIEW,[par])
 
 
@@ -52,5 +52,5 @@ def update_blog_views(blog_views):
     insert(Const.UPDATE_BLOG_VIEWS,pars)
 
 if __name__ == '__main__':
-    a = query_day_blogs(7,2)
+    a = query_view_blog_id('/p/c7b592ca8381')
     print a

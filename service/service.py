@@ -10,6 +10,7 @@ from commons.TimeConst import *
 def view_time_insert(timestamp, view, blog_url, redis):
     blog_id = blog_url.split('/')[2]
     redis.zadd('blog:' + blog_id, timestamp, view)
+    redis.expire('blog:' + blog_id, 86400)
 
 def get_blog_view(blog_url, redis):
     views = redis.zrangebyscore('blog:'+blog_url.split('/')[2], 0 ,100000,withscores=True)

@@ -27,12 +27,8 @@ def result_to_view(result):
     blog_view = BlogView()
     blog_view.blog_id = result[0].encode('utf-8')
     blog_view.views = result[1].encode('utf-8')
-    blog_view.hour_views = result[2].encode('utf-8')
-    blog_view.day_views = result[3].encode('utf-8')
-    blog_view.hours_num = result[4]
-    blog_view.days_num = result[5]
-    blog_view.author_url = result[6].encode('utf-8')
+    blog_view.author_url = result[2].encode('utf-8')
     return blog_view
 
 def view_to_par(view):
-    return (view.views, view.hour_views,view.day_views,view.hours_num,view.days_num, view.author_url, view.blog_id)
+    return (view.views, view.author_url, view.blog_id)
