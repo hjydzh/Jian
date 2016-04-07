@@ -9,7 +9,7 @@ FROM HOT_BLOG
 """
 
 Const.SELECT_VIEW = """
-select BLOG_ID,VIEWS,HOUR_VIEWS,DAY_VIEWS,HOURS_NUMS,DAYS_NUMS,AUTHOR_URL
+select BLOG_ID,VIEWS,AUTHOR_URL
 from blog_view
 """
 
@@ -39,9 +39,9 @@ WHERE SELECTED_TIME <='%s' and SELECTED_TIME >= '%s'
 
 Const.INSERT_VIEW = """
 insert into blog_view
-(BLOG_ID, VIEWS,HOUR_VIEWS,DAY_VIEWS, AUTHOR_URL)
+(BLOG_ID, VIEWS,AUTHOR_URL,CREATE_TIME)
 values
-(%s, %s,%s,%s,%s)
+(%s, %s,%s,NOW())
 """
 
 Const.QUERY_HOUR_BLOGS = Const.SELECT_VIEW + """
@@ -56,10 +56,6 @@ Const.UPDATE_BLOG_VIEWS = """
 update blog_view
 set
 views = %s,
-hour_views = %s,
-day_views = %s,
-hours_nums = %s,
-days_nums = %s,
 author_url = %s,
 UPDATE_TIME = NOW()
 where blog_id = %s
